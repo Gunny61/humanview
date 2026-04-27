@@ -12,6 +12,13 @@
     "audit",
     "code review"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Gunny61/humanview"
+  },
+  "bugs": {
+    "url": "https://github.com/Gunny61/humanview/issues"
+  },
   "version": "1.0.0",
   "publisher": "memit",
   "engines": {

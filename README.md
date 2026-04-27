@@ -4,6 +4,7 @@ A smart, lightweight code-review tracking engine built natively for VS Code.
 
 Humanview allows you to quickly mark, categorize, and navigate through code sections during code reviews, audits, or complex refactoring sessions. Say goodbye to losing your place while reviewing massive files.
 
+![Sample Gif](./media/sample.gif)
 ## Features
 
 * **Visual Code Marking:** Instantly color-code contiguous blocks of code directly in your editor's gutter.
@@ -17,9 +18,9 @@ Highlight a block of code (or just place your cursor on a line) and use the foll
 
 | Command | Shortcut (Windows/Linux) | Shortcut (Mac) | Color |
 |---------|-------------------------|----------------|-------|
-| **Mark as Verified** | `Ctrl + Shift + V` | `Cmd + Shift + V` | Green |
-| **Mark for Review** | `Ctrl + Shift + R` | `Cmd + Shift + R` | Yellow |
-| **Mark as Problem** | `Ctrl + Shift + X` | `Cmd + Shift + X` | Red |
+| **Mark as Verified** | `Ctrl + Shift + V` | `Cmd + Shift + V` | 🟢 Green |
+| **Mark for Review** | `Ctrl + Shift + R` | `Cmd + Shift + R` |🟡 Yellow |
+| **Mark as Problem** | `Ctrl + Shift + X` | `Cmd + Shift + X` | 🔴 Red |
 | **Clear Mark** | `Ctrl + Shift + C` | `Cmd + Shift + C` | None |
 | **Workspace Summary** | `Ctrl + Shift + S` | `Cmd + Shift + S` | - |
 | **Next Mark Block** | `Ctrl + Shift + Down` | `Cmd + Shift + Down` | - |
