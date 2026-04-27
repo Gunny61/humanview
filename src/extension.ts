@@ -90,6 +90,31 @@ export function activate(context: vscode.ExtensionContext) {
     const markTreeProvider = new HumanviewTreeProvider();
     vscode.window.registerTreeDataProvider('humanviewTree', markTreeProvider);
 
+    // --- NEW: LOAD PERMANENT STATE ---
+    const savedData = context.workspaceState.get<Record<string, { verified: number[], review: number[], problem: number[] }>>('humanview_data') || {};
+    for (const [uri, state] of Object.entries(savedData)) {
+        documentStates[uri] = {
+            verified: new Set(state.verified),
+            review: new Set(state.review),
+            problem: new Set(state.problem)
+        };
+    }
+
+    // --- NEW: SAVE PERMANENT STATE ---
+    function saveState() {
+        const dataToSave: Record<string, { verified: number[], review: number[], problem: number[] }> = {};
+        for (const [uri, state] of Object.entries(documentStates)) {
+            if (state.verified.size > 0 || state.review.size > 0 || state.problem.size > 0) {
+                dataToSave[uri] = {
+                    verified: Array.from(state.verified),
+                    review: Array.from(state.review),
+                    problem: Array.from(state.problem)
+                };
+            }
+        }
+        context.workspaceState.update('humanview_data', dataToSave);
+    }
+
     function updateDecorations(editor: vscode.TextEditor) {
         const uri = editor.document.uri.toString();
         const state = getState(uri);
@@ -99,11 +124,15 @@ export function activate(context: vscode.ExtensionContext) {
         markTreeProvider.refresh(); 
     }
 
+    // Trigger on open so saved marks instantly appear
     vscode.window.onDidChangeActiveTextEditor(editor => {
-        if (editor) {
-            updateDecorations(editor);
-        }
+        if (editor) updateDecorations(editor);
     }, null, context.subscriptions);
+
+    // Initial load for the first visible file
+    if (vscode.window.activeTextEditor) {
+        updateDecorations(vscode.window.activeTextEditor);
+    }
 
     vscode.workspace.onDidChangeTextDocument(event => {
         const uri = event.document.uri.toString();
@@ -145,6 +174,7 @@ export function activate(context: vscode.ExtensionContext) {
                 if (editor.document.uri.toString() === uri) updateDecorations(editor);
             });
             markTreeProvider.refresh();
+            saveState(); // <-- Save after document shifts
         }
     });
 
@@ -161,6 +191,7 @@ export function activate(context: vscode.ExtensionContext) {
             }
         }
         updateDecorations(editor);
+        saveState(); // <-- Save after marking
     }
 
     let markVerified = vscode.commands.registerCommand('humanview.markVerified', () => applyMark('verified'));
@@ -175,6 +206,7 @@ export function activate(context: vscode.ExtensionContext) {
             state.verified.delete(i); state.review.delete(i); state.problem.delete(i);
         }
         updateDecorations(editor);
+        saveState(); // <-- Save after clearing
     });
 
     function jumpToMark(direction: 'next' | 'prev') {
