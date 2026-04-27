@@ -1,0 +1,96 @@
+{
+  "name": "humanview",
+  "displayName": "Humanview",
+  "description": "A smart code-review tracker for human and AI code.",
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "review",
+    "highlight",
+    "track",
+    "audit",
+    "code review"
+  ],
+  "version": "1.0.0",
+  "publisher": "memit",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+
+  "contributes": {
+    "commands": [
+      { "command": "humanview.markVerified", "title": "Humanview: Mark as Verified" },
+      { "command": "humanview.markForReview", "title": "Humanview: Mark for Review" },
+      { "command": "humanview.markProblem", "title": "Humanview: Mark as Problem" },
+      { "command": "humanview.clearMark", "title": "Humanview: Clear Mark" },
+      { "command": "humanview.showSummary", "title": "Humanview: Show Workspace Summary" },
+      { "command": "humanview.nextMark", "title": "Humanview: Go to Next Mark Block" },
+      { "command": "humanview.prevMark", "title": "Humanview: Go to Previous Mark Block" }
+    ],
+    "menus": {
+      "editor/context": [
+        { "command": "humanview.markVerified", "group": "navigation" },
+        { "command": "humanview.markForReview", "group": "navigation" },
+        { "command": "humanview.markProblem", "group": "navigation" },
+        { "command": "humanview.clearMark", "group": "navigation" }
+      ]
+    },
+    "keybindings": [
+      { "command": "humanview.markVerified", "key": "ctrl+shift+v", "mac": "cmd+shift+v", "when": "editorTextFocus" },
+      { "command": "humanview.markForReview", "key": "ctrl+shift+r", "mac": "cmd+shift+r", "when": "editorTextFocus" },
+      { "command": "humanview.markProblem", "key": "ctrl+shift+x", "mac": "cmd+shift+x", "when": "editorTextFocus" },
+      { "command": "humanview.clearMark", "key": "ctrl+shift+c", "mac": "cmd+shift+c", "when": "editorTextFocus" },
+      { "command": "humanview.showSummary", "key": "ctrl+shift+s", "mac": "cmd+shift+s" },
+      { "command": "humanview.nextMark", "key": "ctrl+shift+down", "mac": "cmd+shift+down", "when": "editorTextFocus" },
+      { "command": "humanview.prevMark", "key": "ctrl+shift+up", "mac": "cmd+shift+up", "when": "editorTextFocus" }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "humanview-explorer",
+          "title": "Humanview",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "humanview-explorer": [
+        {
+          "id": "humanviewTree",
+          "name": "Marked Sections"
+        }
+      ]
+    }
+  },
+
+
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "npm run check-types && npm run lint && node esbuild.js",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "npm run check-types && npm run lint && node esbuild.js --production",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.x",
+    "@types/vscode": "^1.85.0",
+    "@vscode/test-cli": "^0.0.12",
+    "@vscode/test-electron": "^2.5.2",
+    "esbuild": "^0.27.3",
+    "eslint": "^9.39.3",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.56.1"
+  }
+}
